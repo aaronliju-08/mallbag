@@ -1,0 +1,81 @@
+{
+  "name": "HandoverEvent",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string"
+    },
+    "booking_ref": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "business_owner_id": {
+      "type": "string"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "booking_created",
+        "booking_accepted",
+        "seals_assigned",
+        "handover_confirmed",
+        "collection_verified",
+        "collection_completed",
+        "collection_rejected",
+        "booking_cancelled"
+      ]
+    },
+    "actor_role": {
+      "type": "string",
+      "enum": [
+        "customer",
+        "business_owner",
+        "system"
+      ]
+    },
+    "seal_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "booking_id",
+    "event_type",
+    "actor_role"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.customer_id": "{{user.id}}"
+        },
+        {
+          "data.business_owner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

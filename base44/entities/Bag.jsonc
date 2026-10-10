@@ -1,0 +1,98 @@
+{
+  "name": "Bag",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string"
+    },
+    "booking_ref": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "business_owner_id": {
+      "type": "string"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "seal_id": {
+      "type": "string"
+    },
+    "condition_at_dropoff": {
+      "type": "string"
+    },
+    "condition_at_collection": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "sealed",
+        "stored",
+        "collected"
+      ],
+      "default": "sealed"
+    },
+    "sealed_at": {
+      "type": "string"
+    },
+    "collected_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "booking_id",
+    "customer_id",
+    "business_owner_id",
+    "seal_id",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.customer_id": "{{user.id}}"
+        },
+        {
+          "data.business_owner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.business_owner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.business_owner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

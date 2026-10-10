@@ -1,0 +1,98 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "booking_ref": {
+      "type": "string"
+    },
+    "business_id": {
+      "type": "string"
+    },
+    "business_name": {
+      "type": "string"
+    },
+    "business_owner_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "number_of_bags": {
+      "type": "number"
+    },
+    "total_price": {
+      "type": "number"
+    },
+    "is_free": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "sealed",
+        "stored",
+        "collected",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "accepted_at": {
+      "type": "string"
+    },
+    "stored_at": {
+      "type": "string"
+    },
+    "collected_at": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "booking_ref",
+    "business_id",
+    "number_of_bags",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.business_owner_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "data.business_owner_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
